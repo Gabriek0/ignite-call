@@ -1,8 +1,8 @@
-import { Heading } from "@ignite-ui/react";
-import { globalStyles } from "../../styles/global";
+import { Heading } from '@ignite-ui/react'
+import { globalStyles } from '../../styles/global'
 
-globalStyles();
+globalStyles()
 
 export default function Home() {
-  return <Heading as="h1">Hello World!</Heading>;
+  return <Heading as="h1">Hello World!</Heading>
 }
