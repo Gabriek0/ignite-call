@@ -1,5 +1,34 @@
-import { Heading } from "@ignite-ui/react";
+import Image from "next/image";
+
+import { Heading, Text } from "@ignite-ui/react";
+
+// Styles
+import { Container, Hero, Preview } from "./styles";
+
+// Image
+import CalendarPreviewImage from "/public/calendar_preview.png";
 
 export default function Home() {
-  return <Heading as="h1">Hello World!</Heading>;
+  return (
+    <Container>
+      <Hero>
+        <Heading size="4xl">Agendamento descomplicado</Heading>
+
+        <Text size="xl">
+          Conecte seu calendário e permita que as pessoas marquem agendamentos
+          no seu tempo livre.
+        </Text>
+      </Hero>
+
+      <Preview>
+        <Image
+          src={CalendarPreviewImage}
+          alt="Calendar Image"
+          height={400}
+          quality={100}
+          priority
+        />
+      </Preview>
+    </Container>
+  );
 }
