@@ -9,6 +9,8 @@ import { Container, Form, FormError, Header } from './styles'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const regex = /^([a-z\\\\-]+)$/i
 const string = z
@@ -31,9 +33,13 @@ const createRegisterSchemaForm = z.object({
 type CreateRegisterSchemaForm = z.infer<typeof createRegisterSchemaForm>
 
 export default function Register() {
+  // Hooks
+  const router = useRouter()
+
   const {
-    handleSubmit,
     register,
+    setValue,
+    handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<CreateRegisterSchemaForm>({
     resolver: zodResolver(createRegisterSchemaForm),
@@ -42,6 +48,13 @@ export default function Register() {
   async function handleRegister(data: CreateRegisterSchemaForm) {
     console.log(data)
   }
+
+  // Effects
+  useEffect(() => {
+    if (!router?.query.username) return
+
+    setValue('username', String(router?.query.username))
+  }, [router?.query.username, setValue])
 
   return (
     <Container>

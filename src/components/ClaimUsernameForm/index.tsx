@@ -10,6 +10,7 @@ import { ArrowRight } from 'phosphor-react'
 import z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/router'
 
 const regex = /^([a-z\\\\-]+)$/i
 const string = z
@@ -29,6 +30,9 @@ const createClaimUsernameFormSchema = z.object({
 type ClaimUsernameFormType = z.infer<typeof createClaimUsernameFormSchema>
 
 export function ClaimUsernameForm() {
+  // Hooks
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -38,7 +42,9 @@ export function ClaimUsernameForm() {
   })
 
   async function handleClaimUsername(data: ClaimUsernameFormType) {
-    console.log(data.username)
+    const { username } = data
+
+    router.push(`register?username=${username}`)
   }
 
   return (
