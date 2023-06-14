@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
 
 // Icon
@@ -6,11 +8,13 @@ import { ArrowRight } from 'phosphor-react'
 // Styles
 import { Container, Form, FormError, Header } from './styles'
 
+// useForm + zod
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
+
+// Axios
+import { api } from '@/lib/axios'
 
 const regex = /^([a-z\\\\-]+)$/i
 const string = z
@@ -46,7 +50,16 @@ export default function Register() {
   })
 
   async function handleRegister(data: CreateRegisterSchemaForm) {
-    console.log(data)
+    const { name, username } = data
+
+    try {
+      await api.post('/users', {
+        name,
+        username,
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   // Effects
