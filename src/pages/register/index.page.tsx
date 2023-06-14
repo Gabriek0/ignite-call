@@ -53,6 +53,7 @@ export default function Register() {
   useEffect(() => {
     if (!router?.query.username) return
 
+    // router.query.username can be string or string[] and with String() method we can transform this data.
     setValue('username', String(router?.query.username))
   }, [router?.query.username, setValue])
 
