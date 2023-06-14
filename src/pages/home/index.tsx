@@ -2,12 +2,14 @@ import Image from 'next/image'
 
 import { Heading, Text } from '@ignite-ui/react'
 
+// Components
+import { ClaimUsernameForm } from '@/components/ClaimUsernameForm'
+
 // Styles
 import { Container, Hero, Preview } from './styles'
 
 // Image
 import CalendarPreviewImage from '../../../public/calendar_preview.png'
-import { ClaimUsernameForm } from '@/components/ClaimUsernameForm'
 
 export default function Home() {
   return (
