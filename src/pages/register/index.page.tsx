@@ -15,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 // Axios
 import { api } from '@/lib/axios'
+import { AxiosError } from 'axios'
 
 const regex = /^([a-z\\\\-]+)$/i
 const string = z
@@ -58,7 +59,9 @@ export default function Register() {
         username,
       })
     } catch (err) {
-      console.log(err)
+      if (err instanceof AxiosError && err?.response?.data?.message) {
+        alert(err.response.data.message)
+      }
     }
   }
 
