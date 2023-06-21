@@ -1,11 +1,11 @@
-import { Button, Heading, MultiStep, Text } from "@ignite-ui/react";
+import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
 
 // Icon
-import { ArrowRight } from "phosphor-react";
+import { ArrowRight } from 'phosphor-react'
 
 // Styles
-import { ConnectBox, ConnectItem } from "./styles";
-import { Container, Header } from "../styles";
+import { ConnectBox, ConnectItem } from './styles'
+import { Container, Header } from '../styles'
 
 export default function ConnectCalendarPage() {
   return (
@@ -36,5 +36,5 @@ export default function ConnectCalendarPage() {
         </Button>
       </ConnectBox>
     </Container>
-  );
+  )
 }
