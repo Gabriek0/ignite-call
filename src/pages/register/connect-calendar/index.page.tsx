@@ -1,13 +1,18 @@
-import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
+import { signIn } from "next-auth/react";
+
+import { Button, Heading, MultiStep, Text } from "@ignite-ui/react";
 
 // Icon
-import { ArrowRight } from 'phosphor-react'
+import { ArrowRight } from "phosphor-react";
 
 // Styles
-import { ConnectBox, ConnectItem } from './styles'
-import { Container, Header } from '../styles'
+import { ConnectBox, ConnectItem } from "./styles";
+import { Container, Header } from "../styles";
 
 export default function ConnectCalendarPage() {
+  // this function trigger event to login with google
+  const handleLoginWithGoogle = () => signIn();
+
   return (
     <Container>
       <Header>
@@ -24,7 +29,7 @@ export default function ConnectCalendarPage() {
       <ConnectBox>
         <ConnectItem>
           <Text>Google Calendar</Text>
-          <Button variant="secondary" size="sm">
+          <Button variant="secondary" size="sm" onClick={handleLoginWithGoogle}>
             Conectar
             <ArrowRight />
           </Button>
@@ -36,5 +41,5 @@ export default function ConnectCalendarPage() {
         </Button>
       </ConnectBox>
     </Container>
-  )
+  );
 }
