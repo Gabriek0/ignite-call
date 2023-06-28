@@ -1,17 +1,26 @@
-import { signIn } from 'next-auth/react'
+import { useRouter } from "next/router";
 
-import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
+import { signIn, useSession } from "next-auth/react";
+
+import { Button, Heading, MultiStep, Text } from "@ignite-ui/react";
 
 // Icon
-import { ArrowRight } from 'phosphor-react'
+import { ArrowRight, Check } from "phosphor-react";
 
 // Styles
-import { ConnectBox, ConnectItem } from './styles'
-import { Container, Header } from '../styles'
+import { Container, Header } from "../styles";
+import { AuthError, ConnectBox, ConnectItem } from "./styles";
 
 export default function ConnectCalendarPage() {
+  const router = useRouter();
+  const { status } = useSession();
+
   // this function trigger event to login with google
-  const handleLoginWithGoogle = () => signIn()
+  const handleLoginWithGoogle = () => signIn();
+
+  // Simple vars
+  const hasAuthError = !!router.query.error;
+  const isAuthenticated = status === "authenticated";
 
   return (
     <Container>
@@ -29,17 +38,36 @@ export default function ConnectCalendarPage() {
       <ConnectBox>
         <ConnectItem>
           <Text>Google Calendar</Text>
-          <Button variant="secondary" size="sm" onClick={handleLoginWithGoogle}>
-            Conectar
-            <ArrowRight />
-          </Button>
+
+          {!isAuthenticated ? (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleLoginWithGoogle}
+            >
+              Conectar
+              <ArrowRight />
+            </Button>
+          ) : (
+            <Button size="sm" disabled>
+              Conectado
+              <Check />
+            </Button>
+          )}
         </ConnectItem>
 
-        <Button type="submit">
+        {hasAuthError && (
+          <AuthError size="sm">
+            Falha ao se conectar ao Google, verifique se você habilitou as
+            permissões de acesso ao Google Calendar.
+          </AuthError>
+        )}
+
+        <Button type="submit" disabled={!isAuthenticated}>
           Próximo passo
           <ArrowRight />
         </Button>
       </ConnectBox>
     </Container>
-  )
+  );
 }
