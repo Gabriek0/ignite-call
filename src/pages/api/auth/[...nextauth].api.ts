@@ -1,37 +1,57 @@
-import { AuthOptions } from 'next-auth'
-import NextAuth from 'next-auth/next'
-import GoogleProvider from 'next-auth/providers/google'
+import { NextApiRequest, NextApiResponse } from "next";
 
-export const authOptions: AuthOptions = {
-  secret: process.env.NEXTAUTH_SESSION,
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+import NextAuth from "next-auth/next";
+import { AuthOptions, TokenSet } from "next-auth";
 
-      authorization: {
-        params: {
-          scope:
-            'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar',
-          prompt: 'consent',
-          acces_type: 'offline',
-          response_type: 'code',
+import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
+import PrismaAdapter from "@/adapters/prisma";
+
+function NextAuthHandler(
+  req: NextApiRequest,
+  res: NextApiResponse
+): AuthOptions {
+  return {
+    secret: process.env.NEXTAUTH_SESSION,
+    adapter: PrismaAdapter(req, res),
+    providers: [
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID as string,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+        profile(profile: GoogleProfile) {
+          return {
+            id: profile.sub,
+            username: "",
+            avatar_url: profile.picture,
+            name: profile.name,
+            email: profile.email,
+          };
         },
+        authorization: {
+          params: {
+            scope:
+              "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar",
+            prompt: "consent",
+            acces_type: "offline",
+            response_type: "code",
+          },
+        },
+      }),
+    ],
+
+    callbacks: {
+      async signIn({ account }) {
+        const calendar = "https://www.googleapis.com/auth/calendar";
+
+        if (!account?.scope?.includes(calendar)) {
+          return "/register/connect-calendar?error=permissions";
+        }
+
+        return true;
       },
-    }),
-  ],
-
-  callbacks: {
-    async signIn({ account }) {
-      const calendar = 'https://www.googleapis.com/auth/calendar'
-
-      if (!account?.scope?.includes(calendar)) {
-        return '/register/connect-calendar?error=permissions'
-      }
-
-      return true
     },
-  },
+  };
 }
 
-export default NextAuth(authOptions)
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
+  return await NextAuth(req, res, NextAuthHandler(req, res));
+}
