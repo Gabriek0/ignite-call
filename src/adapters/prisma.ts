@@ -39,11 +39,15 @@ export default function PrismaAdapter(
       };
     },
     async getUser(id) {
-      const user = await prisma.user.findFirstOrThrow({
+      const user = await prisma.user.findFirst({
         where: {
           id,
         },
       });
+
+      if (!user) {
+        throw new Error("Get a error when trying to get user, User is null.");
+      }
 
       return {
         id: user.id,
@@ -55,7 +59,7 @@ export default function PrismaAdapter(
       };
     },
     async getUserByAccount({ providerAccountId, provider }) {
-      const { user } = await prisma.account.findUniqueOrThrow({
+      const data = await prisma.account.findUnique({
         where: {
           provider_provider_account_id: {
             provider: provider,
@@ -66,6 +70,14 @@ export default function PrismaAdapter(
           user: true,
         },
       });
+
+      if (!data) {
+        throw new Error(
+          "Get a error when trying to get user by account, User is null."
+        );
+      }
+
+      const { user } = data;
 
       return {
         id: user.id,
@@ -98,11 +110,17 @@ export default function PrismaAdapter(
       };
     },
     async getUserByEmail(email) {
-      const user = await prisma.user.findUniqueOrThrow({
+      const user = await prisma.user.findUnique({
         where: {
           email,
         },
       });
+
+      if (!user) {
+        throw new Error(
+          "Get a error when trying to get user by email, User is null."
+        );
+      }
 
       return {
         id: user.id,
@@ -131,7 +149,7 @@ export default function PrismaAdapter(
       });
     },
     async getSessionAndUser(sessionToken) {
-      const { user, ...session } = await prisma.session.findUniqueOrThrow({
+      const sessionAndUser = await prisma.session.findUnique({
         where: {
           session_token: sessionToken,
         },
@@ -139,6 +157,14 @@ export default function PrismaAdapter(
           user: true,
         },
       });
+
+      if (!sessionAndUser) {
+        throw new Error(
+          "Get a error when trying to get session and user, User is null."
+        );
+      }
+
+      const { user, ...session } = sessionAndUser;
 
       return {
         session: {
