@@ -48,6 +48,18 @@ function NextAuthHandler(
 
         return true;
       },
+      async session({ user, session }) {
+        return {
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            username: user.username,
+            avatar_url: user.avatar_url,
+          },
+          expires: session.expires,
+        };
+      },
     },
   };
 }

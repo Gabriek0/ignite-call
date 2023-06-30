@@ -10,10 +10,11 @@ import { ArrowRight, Check } from "phosphor-react";
 // Styles
 import { Container, Header } from "../styles";
 import { AuthError, ConnectBox, ConnectItem } from "./styles";
+import { useEffect } from "react";
 
 export default function ConnectCalendarPage() {
   const router = useRouter();
-  const { status } = useSession();
+  const { data, status } = useSession();
 
   // this function trigger event to login with google
   const handleLoginWithGoogle = async () => await signIn();
