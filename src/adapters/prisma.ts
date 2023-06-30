@@ -72,9 +72,7 @@ export default function PrismaAdapter(
       });
 
       if (!data) {
-        throw new Error(
-          "Get a error when trying to get user by account, User is null."
-        );
+        return null;
       }
 
       const { user } = data;
@@ -117,9 +115,7 @@ export default function PrismaAdapter(
       });
 
       if (!user) {
-        throw new Error(
-          "Get a error when trying to get user by email, User is null."
-        );
+        return null;
       }
 
       return {
@@ -159,9 +155,7 @@ export default function PrismaAdapter(
       });
 
       if (!sessionAndUser) {
-        throw new Error(
-          "Get a error when trying to get session and user, User is null."
-        );
+        return null;
       }
 
       const { user, ...session } = sessionAndUser;
