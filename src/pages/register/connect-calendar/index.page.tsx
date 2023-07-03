@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { signIn, useSession } from "next-auth/react";
@@ -10,11 +11,10 @@ import { ArrowRight, Check } from "phosphor-react";
 // Styles
 import { Container, Header } from "../styles";
 import { AuthError, ConnectBox, ConnectItem } from "./styles";
-import { useEffect } from "react";
 
 export default function ConnectCalendarPage() {
   const router = useRouter();
-  const { data, status } = useSession();
+  const { status } = useSession();
 
   // this function trigger event to login with google
   const handleLoginWithGoogle = async () => await signIn();
