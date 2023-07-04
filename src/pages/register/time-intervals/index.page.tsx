@@ -27,7 +27,7 @@ import { getWeekDays } from "@/utils/get-week-days";
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { error } from "console";
+import { convertTimeStringToMinutes } from "@/utils/convert-time-string-to-minutes";
 
 const TimeIntervalsSchema = z.object({
   intervals: z
@@ -43,10 +43,29 @@ const TimeIntervalsSchema = z.object({
     .transform((intervals) => intervals.filter((interval) => interval.enabled))
     .refine((intervals) => intervals.length > 0, {
       message: "Você precisa selecionar pelo menos um dia da semana.",
-    }),
+    })
+    .transform((intervals) =>
+      intervals.map((interval) => ({
+        weekDay: interval.weekDay,
+        startTimeMinutes: convertTimeStringToMinutes(interval.startTime),
+        endTimeMinutes: convertTimeStringToMinutes(interval.endTime),
+      }))
+    )
+    .refine(
+      (intervals) =>
+        intervals.every(
+          (interval) =>
+            interval.endTimeMinutes - 60 >= interval.startTimeMinutes
+        ),
+      {
+        message:
+          "O horário de término deve ter a diferença de pelo menos 1h do de ínicio.",
+      }
+    ),
 });
 
-type TimeIntervals = z.infer<typeof TimeIntervalsSchema>;
+type TimeIntervalsInput = z.input<typeof TimeIntervalsSchema>;
+type TimeIntervalsOutput = z.output<typeof TimeIntervalsSchema>;
 
 const intervals = [
   { weekDay: 0, enabled: false, startTime: "08:00", endTime: "18:00" },
@@ -65,7 +84,7 @@ export default function TimeIntervalsPage() {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
-  } = useForm({
+  } = useForm<TimeIntervalsInput>({
     resolver: zodResolver(TimeIntervalsSchema),
     defaultValues: {
       intervals: intervals,
@@ -81,8 +100,10 @@ export default function TimeIntervalsPage() {
   const weekDay = getWeekDays();
   const intervals_watch = watch("intervals");
 
-  async function handleSetTimeIntervals(data: TimeIntervals) {
-    console.log(data);
+  async function handleSetTimeIntervals(data: any) {
+    const formData = data as TimeIntervalsOutput;
+
+    console.log(formData);
   }
 
   return (
