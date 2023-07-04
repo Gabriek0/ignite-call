@@ -18,7 +18,7 @@ import { Container, Header } from "../styles";
 
 import { ArrowRight } from "phosphor-react";
 
-import { useFieldArray, useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 // Utils
 import { getWeekDays } from "@/utils/get-week-days";
@@ -35,6 +35,7 @@ const intervals = [
 
 export default function TimeIntervalsPage() {
   const {
+    watch,
     control,
     register,
     handleSubmit,
@@ -52,6 +53,9 @@ export default function TimeIntervalsPage() {
 
   // Simple vars
   const weekDay = getWeekDays();
+  const intervals_watch = watch("intervals");
+
+  async function handleIntervalTime(data: any) {}
 
   return (
     <Container>
@@ -66,11 +70,23 @@ export default function TimeIntervalsPage() {
       </Header>
 
       <IntervalBox as="form">
-        <IntervalsContainer>
+        <IntervalsContainer onSubmit={handleSubmit(handleIntervalTime)}>
           {fields.map((field, index) => (
             <IntervalItem key={field.id}>
               <IntervalDay>
-                <Checkbox />
+                <Controller
+                  control={control}
+                  name={`intervals.${index}.enabled`}
+                  render={({ field }) => (
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={(checked) =>
+                        field.onChange(checked === true)
+                      }
+                    />
+                  )}
+                />
+
                 <Text>{weekDay[field.weekDay]}</Text>
               </IntervalDay>
 
@@ -79,6 +95,7 @@ export default function TimeIntervalsPage() {
                   size="sm"
                   type="time"
                   step={60}
+                  disabled={intervals_watch[index].enabled === false}
                   {...register(`intervals.${index}.startTime`)}
                 />
 
@@ -86,6 +103,7 @@ export default function TimeIntervalsPage() {
                   size="sm"
                   type="time"
                   step={60}
+                  disabled={intervals_watch[index].enabled === false}
                   {...register(`intervals.${index}.endTime`)}
                 />
               </IntervalInputs>
