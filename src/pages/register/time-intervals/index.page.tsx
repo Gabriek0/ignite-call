@@ -104,7 +104,7 @@ export default function TimeIntervalsPage() {
   async function handleSetTimeIntervals(data: any) {
     const { intervals } = data as TimeIntervalsOutput;
 
-    await api.post("/users/time-intervals", { ...intervals });
+    await api.post("/users/time-intervals", { intervals: intervals });
   }
 
   return (
