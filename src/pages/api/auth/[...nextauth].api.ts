@@ -6,7 +6,7 @@ import { AuthOptions } from "next-auth";
 import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 import PrismaAdapter from "@/adapters/prisma";
 
-function NextAuthHandler(
+export function NextAuthHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ): AuthOptions {
