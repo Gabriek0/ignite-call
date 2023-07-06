@@ -1,7 +1,14 @@
 import { FormAnnotation, ProfileBox } from "./styles";
 import { Container, Header } from "../styles";
 
-import { Button, Heading, MultiStep, Text, TextArea } from "@ignite-ui/react";
+import {
+  Avatar,
+  Button,
+  Heading,
+  MultiStep,
+  Text,
+  TextArea,
+} from "@ignite-ui/react";
 
 import { useForm } from "react-hook-form";
 
@@ -25,9 +32,12 @@ export default function UpdateProfilePage() {
     register,
     formState: { isSubmitting },
   } = useForm<UpdateProfileData>();
-
   const session = useSession();
 
+  // Simple vars
+  const avatar_url = session.data?.user.avatar_url;
+
+  // Functions
   async function handleUpdateProfile(data: UpdateProfileData) {
     console.log(data);
   }
@@ -47,6 +57,7 @@ export default function UpdateProfilePage() {
       <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
         <label>
           <Text>Foto de perfil</Text>
+          <Avatar src={avatar_url} />
         </label>
 
         <label>
