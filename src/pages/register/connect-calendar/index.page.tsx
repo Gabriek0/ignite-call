@@ -17,7 +17,7 @@ export default function ConnectCalendarPage() {
 
   // this function trigger event to login with google
   const handleLoginWithGoogle = async () => await signIn();
-  const handleNextStep = () => router.push("/register/update-profile");
+  const handleNextStep = () => router.push("/register/time-intervals");
 
   // Simple vars
   const hasAuthError = !!router.query.error;

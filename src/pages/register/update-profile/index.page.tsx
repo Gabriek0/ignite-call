@@ -18,6 +18,8 @@ import { useSession } from "next-auth/react";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getServerSession } from "next-auth";
 import { NextAuthHandler } from "@/pages/api/auth/[...nextauth].api";
+import { api } from "@/lib/axios";
+import { useRouter } from "next/router";
 
 const UpdateProfileSchema = z.object({
   bio: z.string(),
@@ -27,19 +29,27 @@ type UpdateProfileData = z.infer<typeof UpdateProfileSchema>;
 
 export default function UpdateProfilePage() {
   // Hooks
+  const router = useRouter();
+  const session = useSession();
   const {
     handleSubmit,
     register,
     formState: { isSubmitting },
   } = useForm<UpdateProfileData>();
-  const session = useSession();
 
   // Simple vars
+  const user_name = session.data?.user.name;
   const avatar_url = session.data?.user.avatar_url;
 
   // Functions
   async function handleUpdateProfile(data: UpdateProfileData) {
-    console.log(data);
+    try {
+      await api.put("/users/user-profile", data);
+
+      // router.push(`/schedule/${session.data?.user.username}`);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -57,7 +67,7 @@ export default function UpdateProfilePage() {
       <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
         <label>
           <Text>Foto de perfil</Text>
-          <Avatar src={avatar_url} />
+          <Avatar src={avatar_url} alt={user_name} />
         </label>
 
         <label>

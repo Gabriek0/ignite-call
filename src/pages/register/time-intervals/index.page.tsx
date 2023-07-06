@@ -32,6 +32,7 @@ import {
   TimeIntervalsOutput,
   TimeIntervalsSchema,
 } from "./_schema";
+import { useRouter } from "next/router";
 
 const intervals = [
   { weekDay: 0, enabled: false, startTime: "08:00", endTime: "18:00" },
@@ -44,6 +45,8 @@ const intervals = [
 ];
 
 export default function TimeIntervalsPage() {
+  const router = useRouter();
+
   const {
     watch,
     control,
@@ -70,7 +73,10 @@ export default function TimeIntervalsPage() {
     const { intervals } = data as TimeIntervalsOutput;
 
     await api.post("/users/time-intervals", { intervals });
+    await handleNextStep();
   }
+
+  const handleNextStep = async () => router.push("/register/update-profile");
 
   return (
     <Container>
