@@ -1,17 +1,17 @@
 // Styles
-import { Avatar, Heading, Text } from "@ignite-ui/react";
-import { Container, UserHeader } from "./styles";
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
-import { prisma } from "@/lib/prisma";
+import { Avatar, Heading, Text } from '@ignite-ui/react'
+import { Container, UserHeader } from './styles'
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from 'next'
+import { prisma } from '@/lib/prisma'
 
 type User = {
-  name: string;
-  avatar_url: string;
-  bio: string;
-};
+  name: string
+  avatar_url: string
+  bio: string
+}
 
 interface SchedulePageProps {
-  user: User;
+  user: User
 }
 
 export default function SchedulePage({ user }: SchedulePageProps) {
@@ -23,31 +23,31 @@ export default function SchedulePage({ user }: SchedulePageProps) {
         <Text>{user.bio}</Text>
       </UserHeader>
     </Container>
-  );
+  )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
-    fallback: "blocking",
-  };
-};
+    fallback: 'blocking',
+  }
+}
 
 export const getStaticProps: GetStaticProps = async ({
   params,
 }: GetStaticPropsContext) => {
-  const username = params?.username as string;
+  const username = params?.username as string
 
   const user = await prisma.user.findUnique({
     where: {
-      username: username,
+      username,
     },
-  });
+  })
 
   if (!username || !user) {
     return {
       notFound: true,
-    };
+    }
   }
 
   return {
@@ -59,5 +59,5 @@ export const getStaticProps: GetStaticProps = async ({
       },
     },
     redirect: 60 * 60 * 24, // 1 day
-  };
-};
+  }
+}

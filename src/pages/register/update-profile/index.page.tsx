@@ -1,5 +1,5 @@
-import { FormAnnotation, ProfileBox } from "./styles";
-import { Container, Header } from "../styles";
+import { FormAnnotation, ProfileBox } from './styles'
+import { Container, Header } from '../styles'
 
 import {
   Avatar,
@@ -8,47 +8,47 @@ import {
   MultiStep,
   Text,
   TextArea,
-} from "@ignite-ui/react";
+} from '@ignite-ui/react'
 
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form'
 
-import * as z from "zod";
-import { ArrowRight } from "phosphor-react";
-import { useSession } from "next-auth/react";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { getServerSession } from "next-auth";
-import { NextAuthHandler } from "@/pages/api/auth/[...nextauth].api";
-import { api } from "@/lib/axios";
-import { useRouter } from "next/router";
+import * as z from 'zod'
+import { ArrowRight } from 'phosphor-react'
+import { useSession } from 'next-auth/react'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { getServerSession } from 'next-auth'
+import { NextAuthHandler } from '@/pages/api/auth/[...nextauth].api'
+import { api } from '@/lib/axios'
+import { useRouter } from 'next/router'
 
 const UpdateProfileSchema = z.object({
   bio: z.string(),
-});
+})
 
-type UpdateProfileData = z.infer<typeof UpdateProfileSchema>;
+type UpdateProfileData = z.infer<typeof UpdateProfileSchema>
 
 export default function UpdateProfilePage() {
   // Hooks
-  const router = useRouter();
-  const session = useSession();
+  const router = useRouter()
+  const session = useSession()
   const {
     handleSubmit,
     register,
     formState: { isSubmitting },
-  } = useForm<UpdateProfileData>();
+  } = useForm<UpdateProfileData>()
 
   // Simple vars
-  const user_name = session.data?.user.name;
-  const avatar_url = session.data?.user.avatar_url;
+  const user_name = session.data?.user.name
+  const avatar_url = session.data?.user.avatar_url
 
   // Functions
   async function handleUpdateProfile(data: UpdateProfileData) {
     try {
-      await api.put("/users/user-profile", data);
+      await api.put('/users/user-profile', data)
 
-      // router.push(`/schedule/${session.data?.user.username}`);
+      router.push(`/schedule/${session.data?.user.username}`)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   }
 
@@ -72,7 +72,7 @@ export default function UpdateProfilePage() {
 
         <label>
           <Text size="sm">Sobre você</Text>
-          <TextArea {...register("bio")} />
+          <TextArea {...register('bio')} />
           <FormAnnotation size="sm">
             Fale um pouco sobre você. Isto será exibido em sua página pessoal.
           </FormAnnotation>
@@ -84,18 +84,18 @@ export default function UpdateProfilePage() {
         </Button>
       </ProfileBox>
     </Container>
-  );
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
   res,
 }: GetServerSidePropsContext) => {
-  const session = await getServerSession(req, res, NextAuthHandler(req, res));
+  const session = await getServerSession(req, res, NextAuthHandler(req, res))
 
   return {
     props: {
-      session: session,
+      session,
     },
-  };
-};
+  }
+}
