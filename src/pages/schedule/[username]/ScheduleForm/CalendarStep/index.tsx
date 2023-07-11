@@ -11,7 +11,7 @@ import {
 import { Text } from "@ignite-ui/react";
 
 export function CalendarStep() {
-  const isDateSelected = true;
+  const isDateSelected = false;
 
   return (
     <Container isTimePickerOpen={isDateSelected}>
