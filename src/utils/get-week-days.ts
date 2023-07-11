@@ -1,3 +1,5 @@
+import { capitalize } from "./capitalize";
+
 interface GetWeekDaysProps {
   locale: string;
   short?: boolean;
@@ -18,6 +20,6 @@ export function getWeekDays({
         return weekDay.substring(0, 3).toUpperCase().concat(" .");
       }
 
-      return weekDay.substring(0, 1).toUpperCase().concat(weekDay.substring(1));
+      return capitalize(weekDay);
     });
 }
