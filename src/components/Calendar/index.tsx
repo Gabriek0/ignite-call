@@ -10,10 +10,10 @@ import {
 
 import { getWeekDays } from "@/utils/get-week-days";
 
-import { useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
-import dayjs from "dayjs";
 import { capitalize } from "@/utils/capitalize";
+import dayjs from "dayjs";
 
 interface Day {
   date: dayjs.Dayjs;
@@ -29,7 +29,12 @@ interface CalendarWeek {
 
 type CalendarWeeks = CalendarWeek[];
 
-export function Calendar() {
+interface CalendarProps {
+  selectedDate: Date | null;
+  setSelectedDate: Dispatch<SetStateAction<Date | null>>;
+}
+
+export function Calendar(props: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(() => dayjs().set("date", 1));
 
   // Simple vars
@@ -98,7 +103,7 @@ export function Calendar() {
       })),
       ...daysInMonthArray.map((date) => ({
         date: date,
-        disabled: false,
+        disabled: date.endOf("date").isBefore(new Date()),
       })),
       ...nextMonthFillArray.map((date) => ({
         date: date,
@@ -159,7 +164,12 @@ export function Calendar() {
             <tr key={week.toLocaleString()}>
               {days.map(({ date, disabled }) => (
                 <td>
-                  <CalendarDay disabled={disabled}>{date.date()}</CalendarDay>
+                  <CalendarDay
+                    disabled={disabled}
+                    onClick={() => props.setSelectedDate(date.toDate())}
+                  >
+                    {date.date()}
+                  </CalendarDay>
                 </td>
               ))}
             </tr>

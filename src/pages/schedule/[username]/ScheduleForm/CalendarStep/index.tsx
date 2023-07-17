@@ -8,19 +8,37 @@ import {
   TimePickerList,
 } from "./styles";
 
+import { capitalize } from "@/utils/capitalize";
 import { Text } from "@ignite-ui/react";
+import dayjs from "dayjs";
+import { useMemo, useState } from "react";
 
 export function CalendarStep() {
-  const isDateSelected = false;
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  const weekDaySelected = useMemo(() => {
+    const weekDay = dayjs()
+      .day(selectedDate?.getDay() || 0)
+      .format("dddd");
+
+    return capitalize(weekDay);
+  }, [selectedDate]);
+
+  const weekDayExtendedSelected = useMemo(() => {
+    const day = dayjs(selectedDate).format("DD");
+    const month = dayjs(selectedDate).format("MMMM");
+
+    return `${day} de ${capitalize(month)}`;
+  }, [selectedDate]);
 
   return (
-    <Container isTimePickerOpen={isDateSelected}>
-      <Calendar />
+    <Container isTimePickerOpen={!!selectedDate}>
+      <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
 
-      {isDateSelected && (
+      {selectedDate && (
         <TimePicker>
           <TimePickerHeader>
-            terça-feira, <span>20 de setembro</span>
+            {weekDaySelected}, <span>{weekDayExtendedSelected}</span>
           </TimePickerHeader>
 
           <TimePickerList>
