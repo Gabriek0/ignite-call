@@ -1,24 +1,24 @@
-import { Button, Text, TextArea, TextInput } from "@ignite-ui/react";
-import { ConfirmForm, FormActions, FormError, FormHeader } from "./styles";
-import { CalendarBlank, Clock } from "phosphor-react";
+import { Button, Text, TextArea, TextInput } from '@ignite-ui/react'
+import { ConfirmForm, FormActions, FormError, FormHeader } from './styles'
+import { CalendarBlank, Clock } from 'phosphor-react'
 
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const confirmFormSchema = z.object({
   name: z
     .string()
-    .min(3, "O nome precisa ter no mínimo 3 caracteres")
-    .nonempty("Esse campo é obrigatório."),
+    .min(3, 'O nome precisa ter no mínimo 3 caracteres')
+    .nonempty('Esse campo é obrigatório.'),
   email: z
     .string()
-    .nonempty("Esse campo é obrigatório.")
-    .email("Digite um email válido."),
+    .nonempty('Esse campo é obrigatório.')
+    .email('Digite um email válido.'),
   observations: z.string().optional(),
-});
+})
 
-type ConfirmFormSchema = z.infer<typeof confirmFormSchema>;
+type ConfirmFormSchema = z.infer<typeof confirmFormSchema>
 
 export function ConfirmStep() {
   const {
@@ -27,10 +27,10 @@ export function ConfirmStep() {
     formState: { isSubmitting, errors },
   } = useForm<ConfirmFormSchema>({
     resolver: zodResolver(confirmFormSchema),
-  });
+  })
 
   async function handleConfirmScheduling(data: any) {
-    console.log(data);
+    console.log(data)
   }
 
   return (
@@ -52,7 +52,7 @@ export function ConfirmStep() {
         <TextInput
           prefix={`cal.com/`}
           placeholder="seu-nome"
-          {...register("name")}
+          {...register('name')}
         />
 
         {errors.name && <FormError size="sm">{errors.name.message}</FormError>}
@@ -60,7 +60,7 @@ export function ConfirmStep() {
 
       <label>
         <Text size="sm">Endereço de e-mail</Text>
-        <TextInput placeholder="seu-email@exemplo.com" {...register("email")} />
+        <TextInput placeholder="seu-email@exemplo.com" {...register('email')} />
 
         {errors.email && (
           <FormError size="sm">{errors.email.message}</FormError>
@@ -71,7 +71,7 @@ export function ConfirmStep() {
         <Text size="sm">Observaçções</Text>
         <TextArea
           placeholder="Digite algumas observações..."
-          {...register("observations")}
+          {...register('observations')}
         />
       </label>
 
@@ -84,5 +84,5 @@ export function ConfirmStep() {
         </Button>
       </FormActions>
     </ConfirmForm>
-  );
+  )
 }

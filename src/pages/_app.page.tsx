@@ -1,11 +1,11 @@
-import { AppProps } from "next/app";
-import { globalStyles } from "../../styles/global";
+import { AppProps } from 'next/app'
+import { globalStyles } from '../../styles/global'
 
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider } from 'next-auth/react'
 
-import "@/lib/dayjs";
+import '@/lib/dayjs'
 
-globalStyles();
+globalStyles()
 
 export default function App({
   Component,
@@ -15,5 +15,5 @@ export default function App({
     <SessionProvider session={session}>
       <Component {...pageProps} />
     </SessionProvider>
-  );
+  )
 }

@@ -98,15 +98,15 @@ export function Calendar(props: CalendarProps) {
 
     const calendarDays = [
       ...previousMonthFillArray.map((date) => ({
-        date: date,
+        date,
         disabled: true,
       })),
       ...daysInMonthArray.map((date) => ({
-        date: date,
+        date,
         disabled: date.endOf("date").isBefore(new Date()),
       })),
       ...nextMonthFillArray.map((date) => ({
-        date: date,
+        date,
         disabled: true,
       })),
     ];
@@ -162,8 +162,8 @@ export function Calendar(props: CalendarProps) {
         <tbody>
           {calendarWeeks.map(({ week, days }) => (
             <tr key={week.toLocaleString()}>
-              {days.map(({ date, disabled }) => (
-                <td>
+              {days.map(({ date, disabled }, index) => (
+                <td key={index}>
                   <CalendarDay
                     disabled={disabled}
                     onClick={() => props.setSelectedDate(date.toDate())}
