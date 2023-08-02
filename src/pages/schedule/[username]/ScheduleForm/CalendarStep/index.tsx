@@ -13,7 +13,8 @@ import { capitalize } from "@/utils/capitalize";
 import { Text } from "@ignite-ui/react";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useQuery } from "react-query";
 
 interface Availability {
   possibleTimes: number[];
@@ -24,10 +25,6 @@ export function CalendarStep() {
   const router = useRouter();
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [availability, setAvailability] = useState<Availability>({
-    possibleTimes: [],
-    availableTimes: [],
-  });
 
   const weekDaySelected = useMemo(() => {
     const weekDay = dayjs()
@@ -46,26 +43,28 @@ export function CalendarStep() {
 
   const username = router.query.username as string;
 
-  const checkIfHourIsDisabled = (hour: number) =>
-    !availability.availableTimes?.includes(hour);
+  const selectedDateWithoutTime = selectedDate
+    ? dayjs(selectedDate).format("YYYY-MM-DD")
+    : null;
 
-  useEffect(() => {
-    if (!selectedDate) {
-      return;
-    }
-
-    api
-      .get(`/users/${username}/availability`, {
+  const { data: availability } = useQuery<Availability>(
+    ["availability", selectedDateWithoutTime],
+    async () => {
+      const response = await api.get(`/users/${username}/availability`, {
         params: {
-          date: dayjs(selectedDate).format("YYYY-MM-DD"),
+          date: selectedDateWithoutTime,
         },
-      })
-      .then((response) => {
-        const times = response.data as Availability;
-
-        setAvailability(times);
       });
-  }, [selectedDate]);
+
+      const { data } = response;
+      const times = data as Availability;
+
+      return times;
+    },
+    {
+      enabled: selectedDateWithoutTime !== null,
+    }
+  );
 
   return (
     <Container isTimePickerOpen={!!selectedDate}>
@@ -78,10 +77,10 @@ export function CalendarStep() {
           </TimePickerHeader>
 
           <TimePickerList>
-            {availability.possibleTimes?.map((hour) => (
+            {availability?.possibleTimes?.map((hour) => (
               <TimePickerItem
                 key={hour}
-                disabled={!checkIfHourIsDisabled(hour)}
+                disabled={!availability?.availableTimes?.includes(hour)}
               >
                 <Text>{String(hour).padStart(2, "0")}:00h</Text>
               </TimePickerItem>
