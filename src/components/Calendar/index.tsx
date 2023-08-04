@@ -12,8 +12,11 @@ import { getWeekDays } from "@/utils/get-week-days";
 
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
+import { api } from "@/lib/axios";
 import { capitalize } from "@/utils/capitalize";
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
 
 interface Day {
   date: dayjs.Dayjs;
@@ -27,6 +30,10 @@ interface CalendarWeek {
   days: Days;
 }
 
+type BlockedDates = {
+  blockedWeekDays: number[];
+};
+
 type CalendarWeeks = CalendarWeek[];
 
 interface CalendarProps {
@@ -35,11 +42,30 @@ interface CalendarProps {
 }
 
 export function Calendar(props: CalendarProps) {
+  const router = useRouter();
   const [currentDate, setCurrentDate] = useState(() => dayjs().set("date", 1));
 
   // Simple vars
+  const username = String(router.query.username);
   const currentYear = currentDate.format("YYYY");
   const currentMonth = currentDate.format("MMMM");
+
+  const { data: blockedDates } = useQuery<BlockedDates["blockedWeekDays"]>(
+    "blocked-dates",
+    async () => {
+      const response = await api.get(`/users/${username}/blocked-dates`, {
+        params: {
+          year: currentYear,
+          month: currentMonth,
+        },
+      });
+
+      const { data } = response;
+      const { blockedWeekDays } = data as BlockedDates;
+
+      return blockedWeekDays;
+    }
+  );
 
   const weekDays = getWeekDays({
     locale: "pt-BR",
@@ -103,7 +129,9 @@ export function Calendar(props: CalendarProps) {
       })),
       ...daysInMonthArray.map((date) => ({
         date,
-        disabled: date.endOf("date").isBefore(new Date()),
+        disabled:
+          date.endOf("date").isBefore(new Date()) ||
+          !!blockedDates?.includes(date.get("day")),
       })),
       ...nextMonthFillArray.map((date) => ({
         date,
