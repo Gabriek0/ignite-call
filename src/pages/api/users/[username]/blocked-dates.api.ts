@@ -52,5 +52,17 @@ export default async function handle(
       )
   );
 
-  return res.status(201).json({ blockedWeekDays });
+  // QUERY TO CHECK BLOCKED DATES WITH ONE OPERATION
+  // SEG -> [8, 9, 10] -> [8, 9] -> true
+  // TER -> [8, 9, 10] -> [8, 9, 10] -> false
+
+  const blockedDatesRaw = await prisma.$queryRaw`
+    SELECT * 
+    FROM schedulings S
+
+    WHERE S.user_id = ${user.id}
+      AND DATE_FORMAT(S.date, "%Y-%m") = ${`${year}-${month}`}
+  `;
+
+  return res.status(201).json({ blockedWeekDays, blockedDatesRaw });
 }
