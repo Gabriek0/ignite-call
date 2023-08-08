@@ -56,12 +56,11 @@ export default async function handle(
   // SEG -> [8, 9, 10] -> [8, 9] -> true
   // TER -> [8, 9, 10] -> [8, 9, 10] -> false
 
-  const blockedDatesRaw = await prisma.$queryRaw`
-    SELECT * 
-    FROM schedulings S
+  // 1. get all schedulings and set a short name (S)
 
-    WHERE S.user_id = ${user.id}
-      AND DATE_FORMAT(S.date, "%Y-%m") = ${`${year}-${month}`}
+  const blockedDatesRaw = await prisma.$queryRaw`
+    SELECT *
+    FROM schedulings S
   `;
 
   return res.status(201).json({ blockedWeekDays, blockedDatesRaw });
