@@ -32,6 +32,7 @@ interface CalendarWeek {
 
 type BlockedDates = {
   blockedWeekDays: number[];
+  blockedDates: number[];
 };
 
 type CalendarWeeks = CalendarWeek[];
@@ -50,20 +51,17 @@ export function Calendar(props: CalendarProps) {
   const currentYear = currentDate.format("YYYY");
   const currentMonth = currentDate.format("MMMM");
 
-  const { data: blockedDates } = useQuery<BlockedDates["blockedWeekDays"]>(
+  const { data: blockedDates } = useQuery<BlockedDates>(
     "blocked-dates",
     async () => {
       const response = await api.get(`/users/${username}/blocked-dates`, {
         params: {
-          year: currentYear,
-          month: currentMonth,
+          year: currentDate.get("year"),
+          month: currentDate.get("month") + 1,
         },
       });
 
-      const { data } = response;
-      const { blockedWeekDays } = data as BlockedDates;
-
-      return blockedWeekDays;
+      return response.data;
     }
   );
 
@@ -87,6 +85,8 @@ export function Calendar(props: CalendarProps) {
 
   // Memo Vars
   const calendarWeeks = useMemo(() => {
+    if (!blockedDates) return [];
+
     const monthDays = currentDate.daysInMonth();
 
     const daysInMonthArray = Array.from(
@@ -131,7 +131,8 @@ export function Calendar(props: CalendarProps) {
         date,
         disabled:
           date.endOf("date").isBefore(new Date()) ||
-          !!blockedDates?.includes(date.get("day")),
+          blockedDates.blockedWeekDays.includes(date.get("day")) ||
+          blockedDates.blockedDates.includes(date.get("date")),
       })),
       ...nextMonthFillArray.map((date) => ({
         date,
@@ -156,7 +157,7 @@ export function Calendar(props: CalendarProps) {
     );
 
     return calendarSplitInWeeks;
-  }, [currentDate]);
+  }, [currentDate, blockedDates]);
 
   return (
     <CalendarContainer>
