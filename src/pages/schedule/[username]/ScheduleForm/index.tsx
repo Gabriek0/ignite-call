@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { CalendarStep } from "./CalendarStep";
-import { ConfirmStep } from "./ConfirmStep";
+import { useState } from 'react'
+import { CalendarStep } from './CalendarStep'
+import { ConfirmStep } from './ConfirmStep'
 
 export function ScheduleForm() {
-  const [selectedDateTime, setSelectedDateTime] = useState<Date | null>(null);
+  const [selectedDateTime, setSelectedDateTime] = useState<Date | null>(null)
 
   function handleClearSelectedDateTime() {
-    setSelectedDateTime(null);
+    setSelectedDateTime(null)
   }
 
   if (selectedDateTime) {
@@ -15,12 +15,12 @@ export function ScheduleForm() {
         schedulingDate={selectedDateTime}
         onBack={handleClearSelectedDateTime}
       />
-    );
+    )
   }
 
   return (
     <>
       <CalendarStep onSelectedDateTime={setSelectedDateTime} />
     </>
-  );
+  )
 }

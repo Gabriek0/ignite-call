@@ -1,14 +1,14 @@
-import { AppProps } from "next/app";
-import { globalStyles } from "../../styles/global";
+import { AppProps } from 'next/app'
+import { globalStyles } from '../../styles/global'
 
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider } from 'next-auth/react'
 
-import "@/lib/dayjs";
-import { QueryClient, QueryClientProvider } from "react-query";
+import '@/lib/dayjs'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
-globalStyles();
+globalStyles()
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 export default function App({
   Component,
@@ -20,5 +20,5 @@ export default function App({
         <Component {...pageProps} />
       </SessionProvider>
     </QueryClientProvider>
-  );
+  )
 }

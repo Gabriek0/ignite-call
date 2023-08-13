@@ -1,16 +1,16 @@
-import { NextSeo } from "next-seo";
-import Image from "next/image";
+import { NextSeo } from 'next-seo'
+import Image from 'next/image'
 
-import { Heading, Text } from "@ignite-ui/react";
+import { Heading, Text } from '@ignite-ui/react'
 
 // Components
-import { ClaimUsernameForm } from "@/components/ClaimUsernameForm";
+import { ClaimUsernameForm } from '@/components/ClaimUsernameForm'
 
 // Styles
-import { Container, Hero, Preview } from "./styles";
+import { Container, Hero, Preview } from './styles'
 
 // Image
-import CalendarPreviewImage from "../../../public/calendar_preview.png";
+import CalendarPreviewImage from '../../../public/calendar_preview.png'
 
 export default function Home() {
   return (
@@ -43,5 +43,5 @@ export default function Home() {
         </Preview>
       </Container>
     </>
-  );
+  )
 }

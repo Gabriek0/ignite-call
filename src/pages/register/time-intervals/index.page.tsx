@@ -5,7 +5,7 @@ import {
   MultiStep,
   Text,
   TextInput,
-} from "@ignite-ui/react";
+} from '@ignite-ui/react'
 
 import {
   FormError,
@@ -14,39 +14,39 @@ import {
   IntervalInputs,
   IntervalItem,
   IntervalsContainer,
-} from "./styles";
+} from './styles'
 
-import { Container, Header } from "../styles";
+import { Container, Header } from '../styles'
 
-import { ArrowRight } from "phosphor-react";
+import { ArrowRight } from 'phosphor-react'
 
 // Utils
-import { getWeekDays } from "@/utils/get-week-days";
+import { getWeekDays } from '@/utils/get-week-days'
 
-import { api } from "@/lib/axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { api } from '@/lib/axios'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 
-import { NextSeo } from "next-seo";
-import { useRouter } from "next/router";
+import { NextSeo } from 'next-seo'
+import { useRouter } from 'next/router'
 import {
   TimeIntervalsInput,
   TimeIntervalsOutput,
   TimeIntervalsSchema,
-} from "./_schema";
+} from './_schema'
 
 const intervals = [
-  { weekDay: 0, enabled: false, startTime: "08:00", endTime: "18:00" },
-  { weekDay: 1, enabled: true, startTime: "08:00", endTime: "18:00" },
-  { weekDay: 2, enabled: true, startTime: "08:00", endTime: "18:00" },
-  { weekDay: 3, enabled: true, startTime: "08:00", endTime: "18:00" },
-  { weekDay: 4, enabled: true, startTime: "08:00", endTime: "18:00" },
-  { weekDay: 5, enabled: true, startTime: "08:00", endTime: "18:00" },
-  { weekDay: 6, enabled: false, startTime: "08:00", endTime: "18:00" },
-];
+  { weekDay: 0, enabled: false, startTime: '08:00', endTime: '18:00' },
+  { weekDay: 1, enabled: true, startTime: '08:00', endTime: '18:00' },
+  { weekDay: 2, enabled: true, startTime: '08:00', endTime: '18:00' },
+  { weekDay: 3, enabled: true, startTime: '08:00', endTime: '18:00' },
+  { weekDay: 4, enabled: true, startTime: '08:00', endTime: '18:00' },
+  { weekDay: 5, enabled: true, startTime: '08:00', endTime: '18:00' },
+  { weekDay: 6, enabled: false, startTime: '08:00', endTime: '18:00' },
+]
 
 export default function TimeIntervalsPage() {
-  const router = useRouter();
+  const router = useRouter()
 
   const {
     watch,
@@ -59,27 +59,27 @@ export default function TimeIntervalsPage() {
     defaultValues: {
       intervals,
     },
-  });
+  })
 
   const { fields } = useFieldArray({
     control,
-    name: "intervals",
-  });
+    name: 'intervals',
+  })
 
   // Simple vars
   const weekDay = getWeekDays({
-    locale: "pt-BR",
-  });
-  const intervals_watch = watch("intervals");
+    locale: 'pt-BR',
+  })
+  const intervals_watch = watch('intervals')
 
   async function handleSetTimeIntervals(data: any) {
-    const { intervals } = data as TimeIntervalsOutput;
+    const { intervals } = data as TimeIntervalsOutput
 
-    await api.post("/users/time-intervals", { intervals });
-    await handleNextStep();
+    await api.post('/users/time-intervals', { intervals })
+    await handleNextStep()
   }
 
-  const handleNextStep = async () => router.push("/register/update-profile");
+  const handleNextStep = async () => router.push('/register/update-profile')
 
   return (
     <>
@@ -149,5 +149,5 @@ export default function TimeIntervalsPage() {
         </IntervalBox>
       </Container>
     </>
-  );
+  )
 }

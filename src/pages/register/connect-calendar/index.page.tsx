@@ -1,28 +1,28 @@
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router'
 
-import { signIn, useSession } from "next-auth/react";
+import { signIn, useSession } from 'next-auth/react'
 
-import { Button, Heading, MultiStep, Text } from "@ignite-ui/react";
+import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
 
 // Icon
-import { ArrowRight, Check } from "phosphor-react";
+import { ArrowRight, Check } from 'phosphor-react'
 
 // Styles
-import { NextSeo } from "next-seo";
-import { Container, Header } from "../styles";
-import { AuthError, ConnectBox, ConnectItem } from "./styles";
+import { NextSeo } from 'next-seo'
+import { Container, Header } from '../styles'
+import { AuthError, ConnectBox, ConnectItem } from './styles'
 
 export default function ConnectCalendarPage() {
-  const router = useRouter();
-  const { status } = useSession();
+  const router = useRouter()
+  const { status } = useSession()
 
   // this function trigger event to login with google
-  const handleLoginWithGoogle = async () => await signIn();
-  const handleNextStep = () => router.push("/register/time-intervals");
+  const handleLoginWithGoogle = async () => await signIn()
+  const handleNextStep = () => router.push('/register/time-intervals')
 
   // Simple vars
-  const hasAuthError = !!router.query.error;
-  const isAuthenticated = status === "authenticated";
+  const hasAuthError = !!router.query.error
+  const isAuthenticated = status === 'authenticated'
 
   return (
     <>
@@ -78,5 +78,5 @@ export default function ConnectCalendarPage() {
         </ConnectBox>
       </Container>
     </>
-  );
+  )
 }
