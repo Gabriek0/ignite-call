@@ -27,6 +27,8 @@ export async function getGoogleOAuthToken(userId: string) {
     new Date()
   );
 
+  console.log(auth);
+
   if (isTokenExpired) {
     const { credentials } = await auth.refreshAccessToken();
     const {

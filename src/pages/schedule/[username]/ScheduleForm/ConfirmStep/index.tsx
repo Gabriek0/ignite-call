@@ -72,11 +72,7 @@ export function ConfirmStep({ schedulingDate, onBack }: ConfirmStepProps) {
 
       <label>
         <Text size="sm">Seu nome</Text>
-        <TextInput
-          prefix={`cal.com/`}
-          placeholder="seu-nome"
-          {...register("name")}
-        />
+        <TextInput placeholder="Seu nome" {...register("name")} />
 
         {errors.name && <FormError size="sm">{errors.name.message}</FormError>}
       </label>
