@@ -50,7 +50,7 @@ export function ConfirmStep({ schedulingDate, onBack }: ConfirmStepProps) {
       date: schedulingDate,
     });
 
-    await router.push(`/schedule/${username}`);
+    onBack();
   }
 
   const hour = dayjs(schedulingDate).format("HH:mm[h]");
